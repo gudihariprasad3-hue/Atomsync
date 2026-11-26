@@ -2,6 +2,11 @@
 # AtmoSync .gitignore
 # ============================================================
 
+# --- RUNTIME OUTPUT (generated data, not source) ---
+data/pipeline_output/
+logs/
+*.log
+
 # --- CREDENTIALS AND SECRETS (NEVER COMMIT) ---
 .env
 *.env
