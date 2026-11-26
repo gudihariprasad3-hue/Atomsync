@@ -1,0 +1,1 @@
+"""AtmoSync alerts package."""

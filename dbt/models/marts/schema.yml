@@ -1,0 +1,49 @@
+version: 2
+
+models:
+  - name: mart_spoilage_analysis
+    description: "Container spoilage risk analysis with degradation scores"
+    columns:
+      - name: container_id
+        description: "Unique container identifier"
+        tests:
+          - unique
+          - not_null
+      - name: spoilage_score
+        description: "Spoilage score 0.0 (fresh) to 1.0 (spoiled)"
+        tests:
+          - not_null
+      - name: risk_level
+        description: "Risk classification"
+        tests:
+          - accepted_values:
+              values: ['LOW_RISK', 'MEDIUM_RISK', 'HIGH_RISK', 'CRITICAL_RISK']
+      - name: quality_remaining_pct
+        description: "Remaining quality percentage (0.0 to 1.0)"
+
+  - name: mart_arbitrage_opportunities
+    description: "Arbitrage opportunity analysis per container per alternative market"
+    columns:
+      - name: container_id
+        description: "Container identifier"
+        tests:
+          - not_null
+      - name: rerouting_recommendation
+        description: "Recommendation for rerouting"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['RECOMMEND_REROUTE', 'EVALUATE_REROUTE', 'STAY_ON_COURSE']
+
+  - name: mart_container_health
+    description: "Dashboard-ready container health dashboard mart"
+    columns:
+      - name: container_id
+        description: "Unique container identifier"
+        tests:
+          - unique
+          - not_null
+      - name: health_score
+        description: "Composite health score 0-100"
+        tests:
+          - not_null

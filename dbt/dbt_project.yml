@@ -1,0 +1,59 @@
+name: 'atmosync'
+version: '1.0.0'
+config-version: 2
+
+# Profile defines the target database (Snowflake)
+# The profile is configured in ~/.dbt/profiles.yml
+profile: 'atmosync'
+
+# Model file paths
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+# Target directory for compiled SQL and results
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+# Global model configurations
+models:
+  atmosync:
+    # Staging layer: views for lightweight transformation
+    staging:
+      +materialized: view
+      +schema: STAGING
+      +tags: ["staging"]
+
+    # Marts layer: tables for performant analytics
+    marts:
+      +materialized: table
+      +schema: MARTS
+      +tags: ["marts"]
+
+      # Intermediate models as views
+      intermediate:
+        +materialized: view
+
+# Source freshness check settings
+sources:
+  atmosync:
+    +warn_after: {count: 1, period: hour}
+    +error_after: {count: 24, period: hour}
+
+# Variable definitions (can be overridden at run time)
+vars:
+  # Spoilage calculation parameters
+  # DISCLAIMER: These are mock model parameters for demonstration only.
+  spoilage_base_rate: 0.02           # Base spoilage rate per hour at optimal temp
+  temp_spoilage_multiplier: 1.5      # Additional multiplier per °C above max
+  humidity_spoilage_multiplier: 0.8  # Multiplier for humidity deviation
+  vibration_spoilage_multiplier: 1.2 # Multiplier for vibration events
+
+  # Alert threshold
+  critical_spoilage_threshold: 0.70  # 70% degraded → trigger alert
+  min_arbitrage_margin: 500          # USD minimum to recommend rerouting

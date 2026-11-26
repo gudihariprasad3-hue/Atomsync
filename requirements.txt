@@ -1,0 +1,62 @@
+# ==============================================================
+# AtmoSync – Python Dependencies
+# ==============================================================
+# Install with: pip install -r requirements.txt
+# ==============================================================
+
+# ------------------------------------------------------------
+# CORE
+# ------------------------------------------------------------
+python-dotenv==1.0.1          # Load .env configuration
+pydantic==2.7.4               # Data validation and schemas
+
+# ------------------------------------------------------------
+# KAFKA – STREAMING INGESTION
+# ------------------------------------------------------------
+kafka-python==2.0.2           # Kafka producer and consumer
+confluent-kafka==2.4.0        # Alternative high-performance client
+
+# ------------------------------------------------------------
+# SNOWFLAKE – DATA WAREHOUSE
+# ------------------------------------------------------------
+snowflake-connector-python==3.10.1
+snowflake-sqlalchemy==1.5.3   # SQLAlchemy dialect for Snowflake
+cryptography==42.0.8          # Required by Snowflake connector
+
+# ------------------------------------------------------------
+# DBT – DATA TRANSFORMATION
+# ------------------------------------------------------------
+dbt-core==1.8.4
+dbt-snowflake==1.8.3
+
+# ------------------------------------------------------------
+# DATA PROCESSING
+# ------------------------------------------------------------
+pandas==2.2.2                 # Data manipulation
+numpy==1.26.4                 # Numerical computing
+
+# ------------------------------------------------------------
+# TESTING
+# ------------------------------------------------------------
+pytest==8.2.2
+pytest-cov==5.0.0             # Coverage reports
+pytest-mock==3.14.0           # Mocking support
+
+# ------------------------------------------------------------
+# LOGGING & UTILITIES
+# ------------------------------------------------------------
+loguru==0.7.2                 # Enhanced logging
+schedule==1.2.1               # Simple task scheduling
+requests==2.32.3              # HTTP requests (alerts)
+
+# ------------------------------------------------------------
+# OPTIONAL: APACHE SUPERSET (installed separately via Docker)
+# ------------------------------------------------------------
+# Superset is deployed via docker-compose, not pip.
+# See docker-compose.yml and docs/installation.md
+
+# ------------------------------------------------------------
+# DEVELOPMENT TOOLS
+# ------------------------------------------------------------
+black==24.4.2                 # Code formatting
+flake8==7.1.0                 # Linting

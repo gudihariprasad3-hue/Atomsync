@@ -1,0 +1,87 @@
+version: 2
+
+sources:
+  - name: raw
+    description: "Raw IoT sensor data ingested from Kafka consumer into Snowflake"
+    database: ATMOSYNC_DB
+    schema: RAW
+    tables:
+      - name: raw_sensor_readings
+        description: "Raw container sensor readings. One row per sensor event."
+        freshness:
+          warn_after: {count: 1, period: hour}
+          error_after: {count: 24, period: hour}
+        loaded_at_field: LOADED_TIMESTAMP
+        columns:
+          - name: ROW_ID
+            description: "Auto-generated unique row identifier"
+            tests:
+              - unique
+              - not_null
+          - name: EVENT_ID
+            description: "UUID assigned by the simulator to each reading"
+            tests:
+              - unique
+              - not_null
+          - name: CONTAINER_ID
+            description: "Container identifier (e.g. CTR-001)"
+            tests:
+              - not_null
+          - name: EVENT_TIMESTAMP
+            description: "UTC timestamp of the sensor reading"
+            tests:
+              - not_null
+          - name: TEMPERATURE_CELSIUS
+            description: "Internal container temperature in degrees Celsius"
+            tests:
+              - not_null
+          - name: HUMIDITY_PERCENT
+            description: "Internal humidity percentage (0-100)"
+            tests:
+              - not_null
+          - name: VIBRATION_MS2
+            description: "Vibration in metres per second squared"
+            tests:
+              - not_null
+          - name: COMMODITY
+            description: "Type of commodity in the container"
+            tests:
+              - not_null
+              - accepted_values:
+                  values: ['AVOCADO', 'STRAWBERRY', 'BANANA', 'MANGO', 'TOMATO']
+          - name: CONDITION
+            description: "Classified condition based on sensor readings"
+            tests:
+              - accepted_values:
+                  values: ['NORMAL', 'WARNING', 'CRITICAL']
+
+  - name: pricing
+    description: "Mock commodity pricing and market route reference data"
+    database: ATMOSYNC_DB
+    schema: PRICING
+    tables:
+      - name: commodity_prices
+        description: "Mock commodity prices by market. NOT real market data."
+        columns:
+          - name: PRICE_ID
+            tests: [unique, not_null]
+          - name: COMMODITY
+            tests: [not_null]
+          - name: MARKET_NAME
+            tests: [not_null]
+          - name: PRICE_PER_UNIT_USD
+            tests: [not_null]
+      - name: market_routes
+        description: "Shipping routes and alternative market options"
+        columns:
+          - name: ROUTE_ID
+            tests: [unique, not_null]
+          - name: CONTAINER_ID
+            tests: [not_null]
+      - name: container_registry
+        description: "Active container registry with commodity and route assignments"
+        columns:
+          - name: CONTAINER_ID
+            tests: [unique, not_null]
+          - name: COMMODITY
+            tests: [not_null]
